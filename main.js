@@ -41,4 +41,19 @@ let miniMap = new L.Control.MiniMap(
 ).addTo(map);
 
 // TODO: geojson laden und anzeigen
+async function loadBorders(url){
+    let response = await fetch(url);
+    let geojson = await response.json();
+    console.log('Geojson boarders: ', geojson); 
+    L.geoJSON(geojson, {
+        onEachFeature: function(feature, layer){
+            console.log("Feature: ", feature);
+            layer.bindPopup(`<h4>${feature.properties.VIERTEL_NA}</h4>`)
+        },
+    }).addTo(map); 
+}
+loadBorders("data/Viertelgrenzen.geojson"); 
 
+
+
+// shapefile -> in qgis zu wgs84 umwandeln -> exportieren als geojson (präzi auf 5) -> dannach den scheiß drüber zum einbinden! 
